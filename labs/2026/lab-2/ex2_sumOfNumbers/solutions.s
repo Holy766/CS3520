@@ -1,25 +1,35 @@
 .data
+n: .word 5
+msg: .string "Total: "
 
 .text
 
 main:
- addi t0, x0, 0
- addi t1, x0, 5
- blt t1, x0, label
- addi t0, t0, 5
- 
- j end
-  label:
-     addi t0, t0, 6
+    li x5, 1    # i = 1
+    lw x6, n    # upper bound n = 5
+    li x7,0     #total = 0
 
- end:
-     mv a0,t0
-     li a7,1
-     ecall
-     
-    li a7,10
-    ecall 
+    LOOP:
+        blt x6, x5, END     #if i > 5, exit
+        add x7, x7, x5      # total += i
+        addi x5, x5, 1      #i++
 
-  
+        j LOOP  #repeat
 
+    END: 
+        #print msg
+        la a0, msg
+        li a7, 4
+        ecall
+
+        # Print total
+        mv a0, x7
+        li a7, 1
+        ecall
+
+        #exit programm
+        li a7, 10
+        ecall
+
+        
  
